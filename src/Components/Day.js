@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import City from './City';
 
 class Day extends Component {
     constructor(props) {
@@ -8,24 +7,7 @@ class Day extends Component {
 
         this.state = {
             today: new Date(date).toLocaleString('fr-FR', { month: 'long', day: 'numeric' }),
-            prevision: null,
-            city: 'lubumbashi',
         }
-    }
-
-    componentWillMount() {
-        const apiUrl = 'https://api.weatherapi.com/v1/forecast.json?key=17a4671755364f24808112227220103&q=lubumbashi&days=5&aqi=no&alerts=no';
-        fetch(apiUrl)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('This is your prevision data ', data);
-                this.setState({
-                    prevision: data,
-                });
-            })
-            .catch((error) => {
-                console.error(error);
-            });
     }
 
     addDays(date, days) {
@@ -74,14 +56,14 @@ class Day extends Component {
                                 <div className="card-body p-0">
                                     <div className="d-flex weakly-weather text-capitalize">
                                         {
-                                            (this.state.prevision !== null) ?
+                                            (this.props.weather !== null) ?
 
-                                                this.state.prevision.forecast.forecastday.map((data, index) => {
+                                                this.props.weather.forecast.forecastday.map((data, index) => {
                                                     return (
                                                         <div className="weakly-weather-item" key={index}>
                                                             <p className="mb-0"> {this.getDayName(index + 1)} </p>
                                                             <img className='img-fluid' src={data.day.condition.icon} alt='weather img' />
-                                                            <p className="mb-0 h4"> {data.day.maxtemp_c}°</p>
+                                                            <p className="mb-0 h5"> {data.day.maxtemp_c}°</p>
                                                         </div>
                                                     );
                                                 }) :

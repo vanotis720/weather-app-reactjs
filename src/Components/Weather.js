@@ -8,36 +8,27 @@ class Weather extends Component {
         super(props);
         this.state = {
             weather: null,
-            city: 'lubumbashi',
-            latitude: '-11.6876026',
-            longitude: '27.5026174'
         };
-    }
-
-    handleChange = (value) => {
-        this.setState({ city: value });
-        console.log('ville state' + this.state.city);
-        console.log('ville sended' + this.state.city);
-
     }
 
     componentWillMount() {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    console.log(position);
+                (position) => {
+                    console.log('position ' + position.coords.latitude);
+
+                    this.callAPI(position.coords.latitude, position.coords.longitude)
                 },
                 function (error) {
                     console.error("Error Code = " + error.code + " - " + error.message);
+                    alert('vous devez activer la localisation');
                 }
             );
         }
-
-        this.callAPI(this.state.city)
     }
 
-    callAPI(city) {
-        const apiUrl = 'https://api.weatherapi.com/v1/forecast.json?key=17a4671755364f24808112227220103&q=' + this.state.latitude + ',' + this.state.longitude + '&days=5&aqi=no&alerts=no&lang=fr';
+    callAPI(latitude, longitude) {
+        const apiUrl = 'https://api.weatherapi.com/v1/forecast.json?key=17a4671755364f24808112227220103&q=' + latitude + ',' + longitude + '&days=5&aqi=no&alerts=no&lang=fr';
         fetch(apiUrl)
             .then((response) => response.json())
             .then((data) => {
@@ -52,13 +43,13 @@ class Weather extends Component {
     }
 
     render() {
-        if (this.state.weather === null) {
+        if (this.state.weather !== null && this.state.weather.error === undefined) {
+            return <Day weather={this.state.weather} />;
+        }
+        else {
             return (
                 <Loader />
             );
-        }
-        else {
-            return <Day weather={this.state.weather} handleChange={this.handleChange} />;
         }
     }
 }
