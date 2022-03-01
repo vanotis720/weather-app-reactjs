@@ -9,7 +9,7 @@ class City extends Component {
         this.changeCity = this.changeCity.bind(this);
 
         this.state = {
-            city: "Lubumbashi"
+            city: "lubumbashi"
         }
     }
 
@@ -17,13 +17,15 @@ class City extends Component {
         this.setState({
             city: e.target.value
         })
-        console.log(this.state.city);
+
+        this.props.handleChange(e.target.value);
+        // console.log(this.state.city);
     }
 
     render() {
         return (
             <div className="col-lg-4 grid-margin">
-                <select id="city" onChange={this.changeCity} value={this.state.city} className="form-select" aria-label="selectionner la ville">
+                <select id="city" name="city" onChange={this.changeCity} value={this.state.city} className="form-select" aria-label="selectionner la ville">
                     <option value="lubumbashi">Lubumbashi</option>
                     <option value="likasi">Likasi</option>
                     <option value="kolwezi">Kolwezi</option>
